@@ -76,7 +76,7 @@ public class SimulacaoController implements Serializable {
 
     public List<Simulacao> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().listarTodos();
         }
         return items;
     }
@@ -86,9 +86,9 @@ public class SimulacaoController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getFacade().salvar(selected);
                 } else {
-                    getFacade().remove(selected);
+                    getFacade().remover(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -110,15 +110,15 @@ public class SimulacaoController implements Serializable {
     }
 
     public Simulacao getSimulacao(java.lang.Integer id) {
-        return getFacade().find(id);
+        return getFacade().encontrar(id);
     }
 
     public List<Simulacao> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+        return getFacade().listarTodos();
     }
 
     public List<Simulacao> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        return getFacade().listarTodos();
     }
 
     @FacesConverter(forClass = Simulacao.class)
