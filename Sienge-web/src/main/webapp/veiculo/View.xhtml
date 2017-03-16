@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="VeiculoViewDlg" widgetVar="VeiculoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{sienge.ViewVeiculoTitle}">
+            <h:form id="VeiculoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{veiculoController.selected != null}">
+                        <h:outputText value="#{sienge.ViewVeiculoLabel_id}"/>
+                        <h:outputText value="#{veiculoController.selected.id}" title="#{sienge.ViewVeiculoTitle_id}"/>
+                        <h:outputText value="#{sienge.ViewVeiculoLabel_descricao}"/>
+                        <h:outputText value="#{veiculoController.selected.descricao}" title="#{sienge.ViewVeiculoTitle_descricao}"/>
+                        <h:outputText value="#{sienge.ViewVeiculoLabel_fatorMultiplicador}"/>
+                        <h:outputText value="#{veiculoController.selected.fatorMultiplicador}" title="#{sienge.ViewVeiculoTitle_fatorMultiplicador}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{sienge.Close}" onclick="VeiculoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

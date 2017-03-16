@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SimulacaoViewDlg" widgetVar="SimulacaoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{sienge.ViewSimulacaoTitle}">
+            <h:form id="SimulacaoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{simulacaoController.selected != null}">
+                        <h:outputText value="#{sienge.ViewSimulacaoLabel_id}"/>
+                        <h:outputText value="#{simulacaoController.selected.id}" title="#{sienge.ViewSimulacaoTitle_id}"/>
+                        <h:outputText value="#{sienge.ViewSimulacaoLabel_dhRegistro}"/>
+                        <h:outputText value="#{simulacaoController.selected.dhRegistro}" title="#{sienge.ViewSimulacaoTitle_dhRegistro}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{sienge.ViewSimulacaoLabel_veiculo}"/>
+                        <h:outputText value="#{simulacaoController.selected.veiculo}" title="#{sienge.ViewSimulacaoTitle_veiculo}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{sienge.Close}" onclick="SimulacaoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

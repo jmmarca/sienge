@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RodoviaTabelaPrecoViewDlg" widgetVar="RodoviaTabelaPrecoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{sienge.ViewRodoviaTabelaPrecoTitle}">
+            <h:form id="RodoviaTabelaPrecoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rodoviaTabelaPrecoController.selected != null}">
+                        <h:outputText value="#{sienge.ViewRodoviaTabelaPrecoLabel_id}"/>
+                        <h:outputText value="#{rodoviaTabelaPrecoController.selected.id}" title="#{sienge.ViewRodoviaTabelaPrecoTitle_id}"/>
+                        <h:outputText value="#{sienge.ViewRodoviaTabelaPrecoLabel_descricao}"/>
+                        <h:outputText value="#{rodoviaTabelaPrecoController.selected.descricao}" title="#{sienge.ViewRodoviaTabelaPrecoTitle_descricao}"/>
+                        <h:outputText value="#{sienge.ViewRodoviaTabelaPrecoLabel_valor}"/>
+                        <h:outputText value="#{rodoviaTabelaPrecoController.selected.valor}" title="#{sienge.ViewRodoviaTabelaPrecoTitle_valor}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{sienge.Close}" onclick="RodoviaTabelaPrecoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

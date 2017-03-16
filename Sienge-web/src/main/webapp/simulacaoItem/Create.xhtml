@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SimulacaoItemCreateDlg" widgetVar="SimulacaoItemCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{sienge.CreateSimulacaoItemTitle}">
+            <h:form id="SimulacaoItemCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{simulacaoItemController.selected != null}">
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{simulacaoItemController.selected.id}" title="#{sienge.CreateSimulacaoItemTitle_id}" />
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_distancia}" for="distancia" />
+                        <p:inputText id="distancia" value="#{simulacaoItemController.selected.distancia}" title="#{sienge.CreateSimulacaoItemTitle_distancia}" />
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_pesoCarga}" for="pesoCarga" />
+                        <p:inputText id="pesoCarga" value="#{simulacaoItemController.selected.pesoCarga}" title="#{sienge.CreateSimulacaoItemTitle_pesoCarga}" />
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_valorTotal}" for="valorTotal" />
+                        <p:inputText id="valorTotal" value="#{simulacaoItemController.selected.valorTotal}" title="#{sienge.CreateSimulacaoItemTitle_valorTotal}" />
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_idRodovia}" for="idRodovia" />
+                        <p:inputText id="idRodovia" value="#{simulacaoItemController.selected.idRodovia}" title="#{sienge.CreateSimulacaoItemTitle_idRodovia}" />
+                        <p:outputLabel value="#{sienge.CreateSimulacaoItemLabel_idSimulacao}" for="idSimulacao" />
+                        <p:inputText id="idSimulacao" value="#{simulacaoItemController.selected.idSimulacao}" title="#{sienge.CreateSimulacaoItemTitle_idSimulacao}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{simulacaoItemController.create}" value="#{sienge.Save}" update="display,:SimulacaoItemListForm:datalist,:growl" oncomplete="handleSubmit(args,'SimulacaoItemCreateDialog');"/>
+                    <p:commandButton value="#{sienge.Cancel}" onclick="SimulacaoItemCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
