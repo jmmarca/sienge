@@ -3,9 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
         <p:dialog id="idDlgVeiculoCadastro" widgetVar="dlgVeiculoCadastro" modal="true" resizable="false" appendTo="@(body)" header="Cadastro de Veículo" width="400" height="400">
@@ -17,11 +15,10 @@
                         <p:outputLabel value="Fator Multiplicador" for="fatorMultiplicador" />
                         <p:inputText id="fatorMultiplicador" value="#{veiculoController.selecionado.fatorMultiplicador}" title="Fator Multiplicador" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{veiculoController.salvar()}" value="Salvar" update="display,:VeiculoListForm:datalist,:growl" />
-                    <p:commandButton value="Cancelar" onclick="dlgVeiculoCadastro.hide()"/>
+                    <p:commandButton actionListener="#{veiculoController.salvar()}" value="Salvar" update="display,:VeiculoListForm:datalist,:growl" oncomplete="PF('dlgVeiculoCadastro').hide()" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgVeiculoCadastro').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
-
     </ui:composition>
 </html>

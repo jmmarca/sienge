@@ -15,8 +15,8 @@
                         <p:outputLabel value="Valor" for="valor" />
                         <p:inputText id="valor" value="#{rodoviaTabelaPrecoController.selecionada.valor}" title="Valor" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{rodoviaTabelaPrecoController.salvar()}" value="Salvar" update="display,:RodoviaTabelaPrecoListForm:datalist,:growl" />
-                    <p:commandButton value="Cancelar" onclick="dlgRodoviaTabelaPrecoDialog.hide()"/>
+                    <p:commandButton actionListener="#{rodoviaTabelaPrecoController.salvar()}" value="Salvar" update="display,:RodoviaTabelaPrecoListForm:datalist,:growl" oncomplete="PF('dlgRodoviaTabelaPrecoDialog').hide()" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgRodoviaTabelaPrecoDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

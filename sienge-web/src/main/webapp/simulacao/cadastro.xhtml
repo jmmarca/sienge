@@ -22,8 +22,8 @@
                                            itemValue="#{veiculoItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{simulacaoController.salvar()}" value="Salvar" update="display,:SimulacaoListForm:datalist,:growl" />
-                    <p:commandButton value="Cancelar" onclick="SimulacaoDialog.hide()"/>
+                    <p:commandButton actionListener="#{simulacaoController.salvar()}" value="Salvar" update="display,:SimulacaoListForm:datalist,:growl" oncomplete="PF('dlgSimulacaoDialog').hide()" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgSimulacaoDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
