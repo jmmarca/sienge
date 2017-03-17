@@ -14,7 +14,7 @@
                     <p:panelGrid columns="2" rendered="#{simulacaoController.selecionada != null}">
                         
                         <p:outputLabel value="Horário" for="dhRegistro" />
-                        <p:calendar id="dhRegistro" pattern="MM/dd/yyyy HH:mm:ss" value="#{simulacaoController.selecionada.dhRegistro}" title="#{sienge.EditSimulacaoTitle_dhRegistro}"  showOn="button"/>
+                        <p:calendar id="dhRegistro" pattern="MM/dd/yyyy HH:mm:ss" value="#{simulacaoController.selecionada.dhRegistro}" title="Horário"  showOn="button"/>
                         <p:outputLabel value="Veiculo" for="veiculo" />
                         <p:selectOneMenu id="veiculo" value="#{simulacaoController.selecionada.veiculo}" >
                             <f:selectItems value="#{veiculoController.itemsAvailableSelectOne}"
@@ -22,7 +22,7 @@
                                            itemValue="#{veiculoItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{simulacaoController.salvar()}" value="Salvar" update="display,:SimulacaoListForm:datalist,:growl" oncomplete="handleSubmit(args,'SimulacaoDialog');"/>
+                    <p:commandButton actionListener="#{simulacaoController.salvar()}" value="Salvar" update="display,:SimulacaoListForm:datalist,:growl" />
                     <p:commandButton value="Cancelar" onclick="SimulacaoDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

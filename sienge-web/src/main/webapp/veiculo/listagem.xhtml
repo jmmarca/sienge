@@ -46,8 +46,8 @@
                     </p:column>
                     <f:facet name="header">
                         <div style="float: right;">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{veiculoController.novoVeiculo}" update=":idDlgVeiculoCadastro" oncomplete="PF('dlgVeiculoCadastro').show()"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{veiculoController.remover}" update=":growl,datalist" disabled="#{empty veiculoController.selecionado}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{veiculoController.novoVeiculo()}" update=":idDlgVeiculoCadastro" oncomplete="PF('dlgVeiculoCadastro').show()"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{veiculoController.remover()}" update=":growl,datalist" disabled="#{empty veiculoController.selecionado}"/>
                         </div>
                         <div style="clear: both;"/>
                     </f:facet>
