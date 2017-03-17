@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Michel
  */
 @Stateless
-public class VeiculoBean extends AbstractFacade<Veiculo> {
+public class VeiculoBean extends AbstractBean<Veiculo> {
 
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;

@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Michel
  */
 @Stateless
-public class RodoviaTabelaPrecoBean extends AbstractFacade<RodoviaTabelaPreco> {
+public class RodoviaTabelaPrecoBean extends AbstractBean<RodoviaTabelaPreco> {
 
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;

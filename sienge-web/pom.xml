@@ -36,8 +36,13 @@
         <dependency>
             <groupId>com.github.adminfaces</groupId>
             <artifactId>admin-template</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>      
+            <version>0.1-SNAPSHOT</version>           
+        </dependency> 
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>6.0.0</version>
+        </dependency>                
                 
     </dependencies>
 

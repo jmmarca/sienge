@@ -19,6 +19,7 @@
                              rowKey="#{item.id}"
                              rows="10"
                              paginatorPosition="bottom"
+                             emptyMessage="Nenhum registro encontrado"
                              rowsPerPageTemplate="10,20,30,40,50">
                     <p:ajax event="rowSelect"   update="createButton deleteButton"/>
                     <p:ajax event="rowUnselect" update="createButton deleteButton"/>

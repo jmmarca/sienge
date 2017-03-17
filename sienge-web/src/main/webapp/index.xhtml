@@ -18,6 +18,7 @@
     </ui:define>
 
     <ui:define name="menu">
+        #{loginController.verificaSessao()}
         <ul class="sidebar-menu">
             <li>
                 <p:link href="/" onclick="clearBreadCrumbs()">
@@ -50,19 +51,18 @@
     </ui:define>
 
     <ui:define name="top-menu">
-        teste
-        <!-- <ui:include src="/includes/top-bar.xhtml"/> -->
+        <ui:include src="top-menu.xhtml"/>
     </ui:define>
 
     <ui:define name="title">
     </ui:define>
 
     <ui:define name="description">
-        <p:growl id="growl" life="3000"/>
+        <p:messages id="growl" />
     </ui:define>
 
     <ui:define name="body">
-        
+
     </ui:define>
 
 

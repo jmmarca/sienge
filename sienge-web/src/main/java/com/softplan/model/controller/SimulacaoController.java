@@ -6,11 +6,9 @@ import com.softplan.model.bean.SimulacaoBean;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -36,10 +34,6 @@ public class SimulacaoController implements Serializable {
 
     public void setSelecionada(Simulacao selecionada) {
         this.selecionada = selecionada;
-    }
-
-    private SimulacaoBean getFacade() {
-        return simulacaoBean;
     }
 
     public Simulacao novaSimulacao() {
@@ -76,21 +70,21 @@ public class SimulacaoController implements Serializable {
 
     public List<Simulacao> getListaSimulacoes() {
         if (listaSimulacoes == null) {
-            listaSimulacoes = getFacade().listarTodos();
+            listaSimulacoes = simulacaoBean.listarTodos();
         }
         return listaSimulacoes;
     }
 
     public Simulacao getSimulacao(Integer id) {
-        return getFacade().encontrar(id);
+        return simulacaoBean.encontrar(id);
     }
 
     public List<Simulacao> getItemsAvailableSelectMany() {
-        return getFacade().listarTodos();
+        return simulacaoBean.listarTodos();
     }
 
     public List<Simulacao> getItemsAvailableSelectOne() {
-        return getFacade().listarTodos();
+        return simulacaoBean.listarTodos();
     }
 
     @FacesConverter(forClass = Simulacao.class)
@@ -100,7 +94,7 @@ public class SimulacaoController implements Serializable {
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
-            }
+}
             SimulacaoController controller = (SimulacaoController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "simulacaoController");
             return controller.getSimulacao(getKey(value));

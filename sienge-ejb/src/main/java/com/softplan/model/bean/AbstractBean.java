@@ -12,11 +12,11 @@ import javax.persistence.EntityManager;
  *
  * @author Michel
  */
-public abstract class AbstractFacade<T> {
+public abstract class AbstractBean<T> {
 
     private Class<T> entityClass;
 
-    public AbstractFacade(Class<T> entityClass) {
+    public AbstractBean(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
