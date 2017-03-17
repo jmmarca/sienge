@@ -4,23 +4,21 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition>
-
-        <p:dialog id="RodoviaTabelaPrecoCreateDlg" widgetVar="RodoviaTabelaPrecoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{sienge.CreateRodoviaTabelaPrecoTitle}">
+        <p:dialog id="idRodoviaTabelaPrecoDlg" widgetVar="dlgRodoviaTabelaPrecoDialog" modal="true" resizable="false" appendTo="@(body)" header="Preço por Tipo Rodovia">
             <h:form id="RodoviaTabelaPrecoCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{rodoviaTabelaPrecoController.selected != null}">
-                        <p:outputLabel value="#{sienge.CreateRodoviaTabelaPrecoLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{rodoviaTabelaPrecoController.selected.id}" title="#{sienge.CreateRodoviaTabelaPrecoTitle_id}" />
-                        <p:outputLabel value="#{sienge.CreateRodoviaTabelaPrecoLabel_descricao}" for="descricao" />
-                        <p:inputText id="descricao" value="#{rodoviaTabelaPrecoController.selected.descricao}" title="#{sienge.CreateRodoviaTabelaPrecoTitle_descricao}" />
-                        <p:outputLabel value="#{sienge.CreateRodoviaTabelaPrecoLabel_valor}" for="valor" />
-                        <p:inputText id="valor" value="#{rodoviaTabelaPrecoController.selected.valor}" title="#{sienge.CreateRodoviaTabelaPrecoTitle_valor}" />
+                    <p:panelGrid columns="2" rendered="#{rodoviaTabelaPrecoController.selecionada != null}">                
+                        <p:outputLabel value="Descrição" for="descricao" />
+                        <p:inputText id="descricao" value="#{rodoviaTabelaPrecoController.selecionada.descricao}" title="Descrição" />
+                        <p:outputLabel value="Valor" for="valor" />
+                        <p:inputText id="valor" value="#{rodoviaTabelaPrecoController.selecionada.valor}" title="Valor" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{rodoviaTabelaPrecoController.create}" value="#{sienge.Save}" update="display,:RodoviaTabelaPrecoListForm:datalist,:growl" oncomplete="handleSubmit(args,'RodoviaTabelaPrecoCreateDialog');"/>
-                    <p:commandButton value="#{sienge.Cancel}" onclick="RodoviaTabelaPrecoCreateDialog.hide()"/>
+                    <p:commandButton actionListener="#{rodoviaTabelaPrecoController.salvar()}" value="Salvar" update="display,:RodoviaTabelaPrecoListForm:datalist,:growl" oncomplete="handleSubmit(args,'RodoviaTabelaPrecoCreateDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="dlgRodoviaTabelaPrecoDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

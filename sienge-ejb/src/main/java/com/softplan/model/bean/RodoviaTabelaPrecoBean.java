@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Michel
  */
 @Stateless
-public class RodoviaTabelaPrecoFacade extends AbstractFacade<RodoviaTabelaPreco> {
+public class RodoviaTabelaPrecoBean extends AbstractFacade<RodoviaTabelaPreco> {
 
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,7 +25,7 @@ public class RodoviaTabelaPrecoFacade extends AbstractFacade<RodoviaTabelaPreco>
         return em;
     }
 
-    public RodoviaTabelaPrecoFacade() {
+    public RodoviaTabelaPrecoBean() {
         super(RodoviaTabelaPreco.class);
     }
     

@@ -1,17 +1,14 @@
 package com.softplan.model.controller;
 
 import com.softplan.model.entidade.Veiculo;
-import com.softplan.model.util.JsfUtil;
-import com.softplan.model.util.JsfUtil.PersistAction;
-import com.softplan.model.bean.VeiculoFacade;
+import com.softplan.model.util.WebUtil;
+import com.softplan.model.bean.VeiculoBean;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -24,101 +21,71 @@ import javax.faces.convert.FacesConverter;
 public class VeiculoController implements Serializable {
 
     @EJB
-    private com.softplan.model.bean.VeiculoFacade ejbFacade;
-    private List<Veiculo> items = null;
-    private Veiculo selected;
+    private VeiculoBean veiculoBean;
+    private List<Veiculo> listaVeiculos = null;
+    private Veiculo selecionado;
 
     public VeiculoController() {
     }
 
-    public Veiculo getSelected() {
-        return selected;
+    public Veiculo getSelecionado() {
+        return selecionado;
     }
 
-    public void setSelected(Veiculo selected) {
-        this.selected = selected;
+    public void setSelecionado(Veiculo selecionado) {
+        this.selecionado = selecionado;
     }
 
-    protected void setEmbeddableKeys() {
+    public Veiculo novoVeiculo() {
+        selecionado = new Veiculo();
+        return selecionado;
     }
 
-    protected void initializeEmbeddableKey() {
-    }
-
-    private VeiculoFacade getFacade() {
-        return ejbFacade;
-    }
-
-    public Veiculo prepareCreate() {
-        selected = new Veiculo();
-        initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/sienge").getString("VeiculoCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/sienge").getString("VeiculoUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/sienge").getString("VeiculoDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public List<Veiculo> getItems() {
-        if (items == null) {
-            items = getFacade().listarTodos();
-        }
-        return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().salvar(selected);
-                } else {
-                    getFacade().remover(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/sienge").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/sienge").getString("PersistenceErrorOccured"));
+    public void salvar() {
+        try {
+            veiculoBean.salvar(selecionado);
+            WebUtil.addMsgSucesso("Registro salvo com sucesso!");
+            if (!WebUtil.isValido()) {
+                listaVeiculos = null;
             }
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            WebUtil.addMsgErro("Erro ao salvar!");
         }
     }
 
-    public Veiculo getVeiculo(java.lang.Integer id) {
-        return getFacade().encontrar(id);
+    public void remover() {
+        try {
+            veiculoBean.remover(selecionado);
+            if (!WebUtil.isValido()) {
+                selecionado = null;
+                listaVeiculos = null;
+            }
+            WebUtil.addMsgSucesso("Removido com sucesso!");
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            WebUtil.addMsgErro("Erro ao remover!");
+        }
+    }
+
+    public List<Veiculo> getListaVeiculos() {
+        if (listaVeiculos == null) {
+            listaVeiculos = veiculoBean.listarTodos();
+        }
+        return listaVeiculos;
+    }
+
+    public Veiculo getVeiculo(Integer id) {
+        return veiculoBean.encontrar(id);
     }
 
     public List<Veiculo> getItemsAvailableSelectMany() {
-        return getFacade().listarTodos();
+        return veiculoBean.listarTodos();
     }
 
     public List<Veiculo> getItemsAvailableSelectOne() {
-        return getFacade().listarTodos();
+        return veiculoBean.listarTodos();
     }
 
     @FacesConverter(forClass = Veiculo.class)
@@ -134,13 +101,13 @@ public class VeiculoController implements Serializable {
             return controller.getVeiculo(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
+        Integer getKey(String value) {
+            Integer key;
             key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(Integer value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();

@@ -7,9 +7,9 @@
   <packaging>pom</packaging>
   <name>sienge</name>
   <modules>
+    <module>sienge-model</module>
     <module>sienge-ejb</module>
     <module>sienge-web</module>
     <module>sienge-ear</module>
-    <module>sienge-model</module>
   </modules>
 </project>

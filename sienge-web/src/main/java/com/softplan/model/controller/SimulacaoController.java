@@ -1,9 +1,8 @@
 package com.softplan.model.controller;
 
 import com.softplan.model.entidade.Simulacao;
-import com.softplan.model.util.JsfUtil;
-import com.softplan.model.util.JsfUtil.PersistAction;
-import com.softplan.model.bean.SimulacaoFacade;
+import com.softplan.model.util.WebUtil;
+import com.softplan.model.bean.SimulacaoBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,92 +23,65 @@ import javax.faces.convert.FacesConverter;
 public class SimulacaoController implements Serializable {
 
     @EJB
-    private com.softplan.model.bean.SimulacaoFacade ejbFacade;
-    private List<Simulacao> items = null;
-    private Simulacao selected;
+    private SimulacaoBean simulacaoBean;
+    private List<Simulacao> listaSimulacoes = null;
+    private Simulacao selecionada;
 
     public SimulacaoController() {
     }
 
-    public Simulacao getSelected() {
-        return selected;
+    public Simulacao getSelecionada() {
+        return selecionada;
     }
 
-    public void setSelected(Simulacao selected) {
-        this.selected = selected;
+    public void setSelecionada(Simulacao selecionada) {
+        this.selecionada = selecionada;
     }
 
-    protected void setEmbeddableKeys() {
+    private SimulacaoBean getFacade() {
+        return simulacaoBean;
     }
 
-    protected void initializeEmbeddableKey() {
+    public Simulacao novaSimulacao() {
+        selecionada = new Simulacao();
+        return selecionada;
     }
 
-    private SimulacaoFacade getFacade() {
-        return ejbFacade;
-    }
-
-    public Simulacao prepareCreate() {
-        selected = new Simulacao();
-        initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/sienge").getString("SimulacaoCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/sienge").getString("SimulacaoUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/sienge").getString("SimulacaoDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public List<Simulacao> getItems() {
-        if (items == null) {
-            items = getFacade().listarTodos();
-        }
-        return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().salvar(selected);
-                } else {
-                    getFacade().remover(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/sienge").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/sienge").getString("PersistenceErrorOccured"));
+    public void salvar() {
+        try {
+            simulacaoBean.salvar(selecionada);
+            WebUtil.addMsgSucesso("Registro salvo com sucesso!");
+            if (!WebUtil.isValido()) {
+                listaSimulacoes = null;
             }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            WebUtil.addMsgErro("Erro ao salvar!");
         }
     }
 
-    public Simulacao getSimulacao(java.lang.Integer id) {
+    public void remover() {
+        try {
+            simulacaoBean.remover(selecionada);
+            if (!WebUtil.isValido()) {
+                selecionada = null;
+                listaSimulacoes = null;
+            }
+            WebUtil.addMsgSucesso("Removido com sucesso!");
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            WebUtil.addMsgErro("Erro ao remover!");
+        }
+    }
+
+    public List<Simulacao> getListaSimulacoes() {
+        if (listaSimulacoes == null) {
+            listaSimulacoes = getFacade().listarTodos();
+        }
+        return listaSimulacoes;
+    }
+
+    public Simulacao getSimulacao(Integer id) {
         return getFacade().encontrar(id);
     }
 
@@ -134,13 +106,13 @@ public class SimulacaoController implements Serializable {
             return controller.getSimulacao(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
+        Integer getKey(String value) {
+            Integer key;
             key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(Integer value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();

@@ -15,51 +15,52 @@
 
         <ui:define name="body">
             <h:form id="SimulacaoListForm">
-                <p:panel header="#{sienge.ListSimulacaoTitle}">
-                    <p:dataTable id="datalist" value="#{simulacaoController.items}" var="item"
-                                 selectionMode="single" selection="#{simulacaoController.selected}"
-                                 paginator="true"
-                                 rowKey="#{item.id}"
-                                 rows="10"
-                                 rowsPerPageTemplate="10,20,30,40,50"
-                                 >
 
-                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
-                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+                <p:dataTable id="datalist" value="#{simulacaoController.listaSimulacoes}" var="item"
+                             selectionMode="single" selection="#{simulacaoController.simulacaoSelecionada}"
+                             paginator="true"
+                             rowKey="#{item.id}"
+                             rows="10"
+                             paginatorPosition="bottom"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             >
 
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{sienge.ListSimulacaoTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{sienge.ListSimulacaoTitle_dhRegistro}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.dhRegistro}">
-                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{sienge.ListSimulacaoTitle_veiculo}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.veiculo}"/>
-                        </p:column>
-                        <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{sienge.Create}" actionListener="#{simulacaoController.prepareCreate}" update=":SimulacaoCreateForm" oncomplete="PF('SimulacaoCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{sienge.View}" update=":SimulacaoViewForm" oncomplete="PF('SimulacaoViewDialog').show()" disabled="#{empty simulacaoController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{sienge.Edit}" update=":SimulacaoEditForm" oncomplete="PF('SimulacaoEditDialog').show()" disabled="#{empty simulacaoController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{sienge.Delete}" actionListener="#{simulacaoController.destroy}" update=":growl,datalist" disabled="#{empty simulacaoController.selected}"/>
+                    <p:ajax event="rowSelect"   update="createButton deleteButton"/>
+                    <p:ajax event="rowUnselect" update="createButton deleteButton"/>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
                         </f:facet>
-                    </p:dataTable>
-                </p:panel>
+                        <h:outputText value="#{item.id}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Registro"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dhRegistro}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Veículo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.veiculo}"/>
+                    </p:column>
+                    <f:facet name="header">
+                        <div style="float: right;">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{simulacaoController.novaSimulacao}" update=":SimulacaoCreateForm" oncomplete="PF('SimulacaoCreateDialog').show()"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{simulacaoController.remover}" update=":growl,datalist" disabled="#{empty simulacaoController.selecionada}"/>
+                        </div>
+                        <div style="clear: both;"/>                        
+                    </f:facet>
+                </p:dataTable>
+
             </h:form>
 
             <ui:include src="cadastro.xhtml"/>
-            <ui:include src="editar.xhtml"/>
-            <ui:include src="visao.xhtml"/>
+
         </ui:define>
     </ui:composition>
 

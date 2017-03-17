@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Michel
  */
 @Stateless
-public class VeiculoFacade extends AbstractFacade<Veiculo> {
+public class VeiculoBean extends AbstractFacade<Veiculo> {
 
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,7 +25,7 @@ public class VeiculoFacade extends AbstractFacade<Veiculo> {
         return em;
     }
 
-    public VeiculoFacade() {
+    public VeiculoBean() {
         super(Veiculo.class);
     }
     

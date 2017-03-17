@@ -7,63 +7,57 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
-public class JsfUtil {
+public class WebUtil {
 
-    public static SelectItem[] getSelectItems(List<?> entities, boolean selectOne) {
-        int size = selectOne ? entities.size() + 1 : entities.size();
+    public static SelectItem[] getSelectItems(List<?> entidades, boolean selecionarPrimeiro) {
+        int size = selecionarPrimeiro ? entidades.size() + 1 : entidades.size();
         SelectItem[] items = new SelectItem[size];
         int i = 0;
-        if (selectOne) {
+        if (selecionarPrimeiro) {
             items[0] = new SelectItem("", "---");
             i++;
         }
-        for (Object x : entities) {
+        for (Object x : entidades) {
             items[i++] = new SelectItem(x, x.toString());
         }
         return items;
     }
 
-    public static boolean isValidationFailed() {
+    public static boolean isValido() {
         return FacesContext.getCurrentInstance().isValidationFailed();
     }
 
-    public static void addErrorMessage(Exception ex, String defaultMsg) {
+    public static void addErroMsg(Exception ex, String defaultMsg) {
         String msg = ex.getLocalizedMessage();
         if (msg != null && msg.length() > 0) {
-            addErrorMessage(msg);
+            addMsgErro(msg);
         } else {
-            addErrorMessage(defaultMsg);
+            addMsgErro(defaultMsg);
         }
     }
 
-    public static void addErrorMessages(List<String> messages) {
-        for (String message : messages) {
-            addErrorMessage(message);
+    public static void addErrosMsgs(List<String> msgs) {
+        for (String msg : msgs) {
+            addMsgErro(msg);
         }
     }
 
-    public static void addErrorMessage(String msg) {
+    public static void addMsgErro(String msg) {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
-    public static void addSuccessMessage(String msg) {
+    public static void addMsgSucesso(String msg) {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
         FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
     }
 
-    public static String getRequestParameter(String key) {
+    public static String getParamRequest(String key) {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(key);
     }
 
     public static Object getObjectFromRequestParameter(String requestParameterName, Converter converter, UIComponent component) {
-        String theId = JsfUtil.getRequestParameter(requestParameterName);
-        return converter.getAsObject(FacesContext.getCurrentInstance(), component, theId);
-    }
-
-    public static enum PersistAction {
-        CREATE,
-        DELETE,
-        UPDATE
+        String idParam = WebUtil.getParamRequest(requestParameterName);
+        return converter.getAsObject(FacesContext.getCurrentInstance(), component, idParam);
     }
 }
