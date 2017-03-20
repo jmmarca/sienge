@@ -46,7 +46,7 @@ public class EntidadeBean extends AbstractBean<Entidade> {
         salvar(config);
 
         config = new Configuracao();
-        config.setChave("valor_pavimentada");
+        config.setChave("valor_nao_pavimentada");
         config.setValor("0.62");
         salvar(config);
         
