@@ -1,7 +1,7 @@
 package com.softplan.model.entidade;
 
 import com.softplan.model.generic.Entidade;
-import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -21,22 +22,31 @@ import javax.persistence.Table;
 public class SimulacaoItem extends Entidade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Integer id;
 
-    @Column(precision = 12, scale = 2)
-    private BigDecimal distancia;
-
-    @Column(name = "peso_carga", precision = 12, scale = 2)
-    private BigDecimal pesoCarga;
-
-    @Column(name = "valor_total", precision = 12, scale = 2)
-    private BigDecimal valorTotal;
-
-    @JoinColumn(name = "id_rodovia", referencedColumnName = "id")
+    @JoinColumn(name = "id_veiculo", referencedColumnName = "id")
     @ManyToOne
-    private RodoviaTabelaPreco rodovia;
+    private Veiculo veiculo;
+
+    @Column(name = "peso_carga")
+    private Integer pesoCarga;
+
+    @Column(name = "distancia_pavimento", precision = 12, scale = 2)
+    private Integer distanciaPavimento;
+
+    @Column(name = "distancia_nao_pavimento", precision = 12, scale = 2)
+    private Integer distanciaSemPavimento;
+
+    @Column(name = "valor_pavimento", precision = 12, scale = 2)
+    private Double valorPavimento;
+
+    @Column(name = "valor_sem_pavimento", precision = 12, scale = 2)
+    private Double valorSemPavimento;
+
+    @Transient
+    private Double valorTotal;
 
     @JoinColumn(name = "id_simulacao", referencedColumnName = "id")
     @ManyToOne
@@ -52,64 +62,74 @@ public class SimulacaoItem extends Entidade {
         this.id = id;
     }
 
-    public BigDecimal getDistancia() {
-        return distancia;
+    public Double getValorPavimento() {
+        return valorPavimento;
     }
 
-    public void setDistancia(BigDecimal distancia) {
-        this.distancia = distancia;
+    public void setValorPavimento(Double valorPavimento) {
+        this.valorPavimento = valorPavimento;
     }
 
-    public BigDecimal getPesoCarga() {
+    public Double getValorSemPavimento() {
+        return valorSemPavimento;
+    }
+
+    public void setValorSemPavimento(Double valorSemPavimento) {
+        this.valorSemPavimento = valorSemPavimento;
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
+    }
+
+    public Integer getPesoCarga() {
         return pesoCarga;
     }
 
-    public void setPesoCarga(BigDecimal pesoCarga) {
+    public void setPesoCarga(Integer pesoCarga) {
         this.pesoCarga = pesoCarga;
     }
 
-    public BigDecimal getValorTotal() {
+    public Integer getDistanciaPavimento() {
+        return distanciaPavimento;
+    }
+
+    public void setDistanciaPavimento(Integer distanciaPavimento) {
+        this.distanciaPavimento = distanciaPavimento;
+    }
+
+    public Integer getDistanciaSemPavimento() {
+        return distanciaSemPavimento;
+    }
+
+    public void setDistanciaSemPavimento(Integer distanciaSemPavimento) {
+        this.distanciaSemPavimento = distanciaSemPavimento;
+    }
+
+    public Double getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(BigDecimal valorTotal) {
+    public void setValorTotal(Double valorTotal) {
         this.valorTotal = valorTotal;
     }
 
-    public RodoviaTabelaPreco getIdRodovia() {
-        return rodovia;
-    }
-
-    public void setIdRodovia(RodoviaTabelaPreco idRodovia) {
-        this.rodovia = idRodovia;
-    }
-
-    public Simulacao getIdSimulacao() {
+    public Simulacao getSimulacao() {
         return simulacao;
     }
 
-    public void setIdSimulacao(Simulacao idSimulacao) {
-        this.simulacao = idSimulacao;
+    public void setSimulacao(Simulacao simulacao) {
+        this.simulacao = simulacao;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
         return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SimulacaoItem)) {
-            return false;
-        }
-        SimulacaoItem other = (SimulacaoItem) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
     }
 
 }

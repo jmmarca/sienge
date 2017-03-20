@@ -1,6 +1,7 @@
 package com.softplan.model.controller;
 
 import com.github.adminfaces.template.session.AdminSession;
+import com.softplan.model.bean.EntidadeBean;
 import com.softplan.model.bean.UsuarioBean;
 import com.softplan.model.entidade.Usuario;
 import com.softplan.model.util.WebUtil;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Specializes;
+import javax.faces.bean.ManagedProperty;
 import org.omnifaces.util.Faces;
 
 /**
@@ -26,6 +28,10 @@ public class LoginController extends AdminSession implements Serializable {
     @EJB
     private UsuarioBean usuarioBean;
 
+    @EJB
+    private EntidadeBean entidadeBean;
+
+    @ManagedProperty(value = "#{usuario}")
     private Usuario usuario;
 
     private String login;
@@ -46,12 +52,7 @@ public class LoginController extends AdminSession implements Serializable {
         try {
             final int contar = usuarioBean.contar();
             if (contar == 0) {
-                Usuario user = new Usuario();
-                user.setNome("Administrador");
-                user.setLogin("admin");
-                user.setSenha("admin");
-                user.setEmail("teste@sienge.com.br");
-                usuarioBean.salvar(user);
+                entidadeBean.inicializarDB();
             }
             usuario = usuarioBean.logar(usuario, senha);
             if (usuario == null) {

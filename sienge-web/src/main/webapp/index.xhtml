@@ -3,10 +3,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
                 template="/admin.xhtml">
 
     <ui:define name="head">
         <title>Sistema Sienge</title>
+        <h:head>
+        </h:head>
     </ui:define>
 
     <ui:define name="logo-lg">
@@ -30,19 +33,19 @@
                 Processos
             </li>
             <li>
+                <p:link href="/configuracao/listagem.xhtml">
+                    <i class="fa fa-gear"></i>
+                    <span>Configurações</span>
+                </p:link>
+            </li>  
+            <li>
                 <p:link href="/veiculo/listagem.xhtml">
                     <i class="fa fa-truck"></i>
                     <span>Controle de Veículos</span>
                 </p:link>
-            </li>
+            </li>  
             <li>
-                <p:link href="/rodoviaTabelaPreco/listagem.xhtml">
-                    <i class="fa fa-road"></i>
-                    <span>Controle de Rodovias</span>
-                </p:link>
-            </li>            
-            <li>
-                <p:link href="/simulacao/listagem.xhtml">
+                <p:link href="/simulacao/simulador.xhtml">
                     <i class="fa fa-money"></i>
                     <span>Simular Viagem</span>
                 </p:link>
@@ -58,11 +61,13 @@
     </ui:define>
 
     <ui:define name="description">
-        <p:growl id="growl" />
+        <p:growl id="msg" />
     </ui:define>
 
     <ui:define name="body">
-
+        <h:form id="formGeral">
+            <ui:insert name="conteudo"></ui:insert>
+        </h:form>
     </ui:define>
 
 
@@ -71,9 +76,11 @@
            href="https://www.sienge.com.br">
             Sienge Web
         </a>
-
         <div class="pull-right hidden-xs" style="color: gray; height: 20px;">
-            <i>1.0.0</i>
+            <a target="_blank"
+               href="https://github.com/jmmarca/sienge" class="fa fa-github Fs20">
+                <i>1.0.0</i>
+            </a>
         </div>
     </ui:define>
 

@@ -3,18 +3,18 @@ package com.softplan.model.controller;
 import com.softplan.model.entidade.Simulacao;
 import com.softplan.model.util.WebUtil;
 import com.softplan.model.bean.SimulacaoBean;
-
+import com.softplan.model.entidade.SimulacaoItem;
+import com.softplan.model.entidade.Veiculo;
+import com.softplan.model.generic.AppException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 
 @Named("simulacaoController")
 @SessionScoped
@@ -22,32 +22,93 @@ public class SimulacaoController implements Serializable {
 
     @EJB
     private SimulacaoBean simulacaoBean;
+
     private List<Simulacao> listaSimulacoes = null;
-    private Simulacao selecionada;
 
-    public SimulacaoController() {
+    private Simulacao simulacaoSelecionada;
+
+    private Veiculo veiculoSelecionado;
+
+    private Integer pesoTransportado;
+
+    private Integer distanciaNaoPavimentada;
+
+    private Integer distanciaPavimentada;
+
+    public Integer getPesoTransportado() {
+        return pesoTransportado;
     }
 
-    public Simulacao getSelecionada() {
-        return selecionada;
+    public void setPesoTransportado(Integer pesoTransportado) {
+        this.pesoTransportado = pesoTransportado;
     }
 
-    public void setSelecionada(Simulacao selecionada) {
-        this.selecionada = selecionada;
+    public Integer getDistanciaNaoPavimentada() {
+        return distanciaNaoPavimentada;
+    }
+
+    public void setDistanciaNaoPavimentada(Integer distanciaNaoPavimentada) {
+        this.distanciaNaoPavimentada = distanciaNaoPavimentada;
+    }
+
+    public Integer getDistanciaPavimentada() {
+        return distanciaPavimentada;
+    }
+
+    public void setDistanciaPavimentada(Integer distanciaPavimentada) {
+        this.distanciaPavimentada = distanciaPavimentada;
+    }
+
+    public Simulacao getSimulacao(Integer id) {
+        return simulacaoBean.encontrar(id);
+    }
+
+    public Veiculo getVeiculoSelecionado() {
+        return veiculoSelecionado;
+    }
+
+    public void setVeiculoSelecionado(Veiculo veiculoSelecionado) {
+        this.veiculoSelecionado = veiculoSelecionado;
+    }
+
+    public Simulacao getSimulacaoSelecionada() {
+        return simulacaoSelecionada;
+    }
+
+    public void setSimulacaoSelecionada(Simulacao simulacaoSelecionada) {
+        this.simulacaoSelecionada = simulacaoSelecionada;
     }
 
     public Simulacao novaSimulacao() {
-        selecionada = new Simulacao();
-        return selecionada;
+        simulacaoSelecionada = new Simulacao();
+        simulacaoSelecionada.setUsuario(WebUtil.getUsuario());
+        simulacaoSelecionada.setItensSimulacao(new ArrayList());
+        novoItem();
+        return simulacaoSelecionada;
+    }
+
+    private void novoItem() {
+        veiculoSelecionado = null;
+        distanciaNaoPavimentada = 0;
+        distanciaPavimentada = 0;
+        pesoTransportado = 0;
+    }
+
+    public void initView() {
+        if (simulacaoSelecionada == null) {
+            novaSimulacao();
+        }
     }
 
     public void salvar() {
         try {
-            simulacaoBean.salvar(selecionada);
+            simulacaoSelecionada.setDhRegistro(new Date());
+            simulacaoBean.salvar(simulacaoSelecionada);
             WebUtil.addMsgSucesso("Registro salvo com sucesso!");
             if (!WebUtil.isValido()) {
                 listaSimulacoes = null;
             }
+            novaSimulacao();
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             WebUtil.addMsgErro("Erro ao salvar!");
@@ -56,9 +117,9 @@ public class SimulacaoController implements Serializable {
 
     public void remover() {
         try {
-            simulacaoBean.remover(selecionada);
+            simulacaoBean.remover(simulacaoSelecionada);
             if (!WebUtil.isValido()) {
-                selecionada = null;
+                simulacaoSelecionada = null;
                 listaSimulacoes = null;
             }
             WebUtil.addMsgSucesso("Removido com sucesso!");
@@ -75,57 +136,62 @@ public class SimulacaoController implements Serializable {
         return listaSimulacoes;
     }
 
-    public Simulacao getSimulacao(Integer id) {
-        return simulacaoBean.encontrar(id);
-    }
-
-    public List<Simulacao> getItemsAvailableSelectMany() {
-        return simulacaoBean.listarTodos();
-    }
-
-    public List<Simulacao> getItemsAvailableSelectOne() {
-        return simulacaoBean.listarTodos();
-    }
-
-    @FacesConverter(forClass = Simulacao.class)
-    public static class SimulacaoControllerConverter implements Converter {
-
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-}
-            SimulacaoController controller = (SimulacaoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "simulacaoController");
-            return controller.getSimulacao(getKey(value));
-        }
-
-        Integer getKey(String value) {
-            Integer key;
-            key = Integer.valueOf(value);
-            return key;
-        }
-
-        String getStringKey(Integer value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
+    public void adicionarItem() {
+        try {
+            if (veiculoSelecionado == null) {
+                throw new AppException("Favor Informar o veículo");
             }
-            if (object instanceof Simulacao) {
-                Simulacao o = (Simulacao) object;
-                return getStringKey(o.getId());
-            } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Simulacao.class.getName()});
-                return null;
+            if (pesoTransportado == null || pesoTransportado == 0) {
+                throw new AppException("Favor Informar o peso da carga");
             }
-        }
+            distanciaNaoPavimentada = (distanciaNaoPavimentada == null) ? 0 : distanciaNaoPavimentada;
+            distanciaPavimentada = (distanciaPavimentada == null) ? 0 : distanciaPavimentada;
 
+            if (distanciaNaoPavimentada == 0 && distanciaPavimentada == 0) {
+                throw new AppException("Favor Informar a distância");
+            }
+            final SimulacaoItem simulacaoItem = new SimulacaoItem();
+            simulacaoItem.setVeiculo(veiculoSelecionado);
+            simulacaoItem.setDistanciaSemPavimento(this.distanciaNaoPavimentada);
+            simulacaoItem.setDistanciaPavimento(this.distanciaPavimentada);
+            simulacaoItem.setSimulacao(simulacaoSelecionada);
+            simulacaoItem.setPesoCarga(pesoTransportado);
+            simulacaoItem.setValorPavimento(0d);
+            simulacaoItem.setValorSemPavimento(0d);
+            simulacaoItem.setValorTotal(0d);
+            simulacaoSelecionada.getItensSimulacao().add(simulacaoItem);
+            recalcular();
+            novoItem();
+        } catch (AppException ex) {
+            WebUtil.addMsgErro(ex.getMessage());
+        } catch (Exception ex) {
+            WebUtil.addMsgErro("Erro ao adicionar item");
+        }
+    }
+
+    public void removerItem(SimulacaoItem item) {
+        try {
+            simulacaoSelecionada.getItensSimulacao().remove(item);
+            recalcular();
+            WebUtil.addMsgSucesso("Item Removido com sucesso!");
+        } catch (Exception ex) {
+            WebUtil.addMsgErro("Erro ao remover item");
+        }
+    }
+
+    public void onCellEdit() {
+
+    }
+
+    public void recalcular() {
+        try {
+            simulacaoSelecionada = simulacaoBean.calcularCustoViagem(simulacaoSelecionada);
+        } catch (AppException ex) {
+            WebUtil.addMsgErro(ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            WebUtil.addMsgErro("Erro ao efetuar cálculo");
+        }
     }
 
 }

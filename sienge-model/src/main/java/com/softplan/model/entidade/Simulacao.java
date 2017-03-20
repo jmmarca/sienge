@@ -3,6 +3,7 @@ package com.softplan.model.entidade;
 import com.softplan.model.generic.Entidade;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -24,7 +26,7 @@ import javax.persistence.TemporalType;
 public class Simulacao extends Entidade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Integer id;
 
@@ -32,12 +34,15 @@ public class Simulacao extends Entidade {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dhRegistro;
 
-    @JoinColumn(name = "id_veiculo", referencedColumnName = "id")
     @ManyToOne
-    private Veiculo veiculo;
+    @JoinColumn(name = "ID_USUARIO")
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "simulacao")
     private List<SimulacaoItem> itensSimulacao;
+
+    @Transient
+    private Double valorTotal;
 
     public Simulacao() {
     }
@@ -56,6 +61,14 @@ public class Simulacao extends Entidade {
         this.id = id;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     public Date getDhRegistro() {
         return dhRegistro;
     }
@@ -64,20 +77,20 @@ public class Simulacao extends Entidade {
         this.dhRegistro = dhRegistro;
     }
 
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
-
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
-    }
-
     public List<SimulacaoItem> getItensSimulacao() {
         return itensSimulacao;
     }
 
     public void setItensSimulacao(List<SimulacaoItem> itensSimulacao) {
         this.itensSimulacao = itensSimulacao;
+    }
+
+    public Double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     @Override

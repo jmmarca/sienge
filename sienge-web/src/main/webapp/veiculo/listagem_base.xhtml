@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:ui="http://java.sun.com/jsf/facelets"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:f="http://xmlns.jcp.org/jsf/core"
+             xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <p:dataTable id="dtRodoviaPreco" value="#{veiculoController.listaVeiculos}" var="item"
+                 selectionMode="single" selection="#{selecionado}"
+                 paginator="true"
+                 rowKey="#{item.id}"
+                 rows="10"
+                 paginatorPosition="bottom"
+                 rowsPerPageTemplate="10,20,30,40,50"
+                 emptyMessage="Nenhum registro encontrado"
+                 >
+
+        <p:ajax event="rowSelect"   update="@(.createButton), @(.deleteButton), @this" global="false"/>
+        <p:ajax event="rowUnselect" update="@(.createButton), @(.deleteButton), @this" global="false"/>
+
+        <p:ajax event="rowDblselect" update="#{updateSelecionado}, @this" oncomplete="#{onSelection}" global="false"/> 
+
+        <p:column headerText="#" width="50" rendered="#{busca}">     
+            <p:commandButton icon="fa fa-plus-circle" update="#{updateSelecionado}, @this" oncomplete="#{onSelection}" global="false" style="padding: 0px; margin: 0px;">
+                <f:setPropertyActionListener value="#{item}" target="#{selecionado}" />
+            </p:commandButton>
+        </p:column>  
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Id"/>
+            </f:facet>
+            <h:outputText value="#{item.id}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Descrição"/>
+            </f:facet>
+            <h:outputText value="#{item.descricao}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Fator Multiplicador"/>
+            </f:facet>
+            <h:outputText value="#{item.fatorMultiplicador}" >
+                <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+            </h:outputText>
+        </p:column>
+
+        <f:facet name="header">
+            <div style="float: right;">
+                <p:commandButton rendered="#{!busca}" id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{veiculoController.novoVeiculo()}" update="formGeral:display" oncomplete="PF('dlgVeiculoCadastro').show()" />
+                <p:commandButton rendered="#{!busca}" id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{veiculoController.remover()}" update=":msg,dtRodoviaPreco" disabled="#{empty selecionado}"/>
+            </div>
+            <div style="clear: both;"/>
+        </f:facet>
+    </p:dataTable>
+</ui:fragment>

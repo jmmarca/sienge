@@ -1,7 +1,7 @@
 package com.softplan.model.entidade;
 
+import com.softplan.model.generic.Entidade;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +15,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "veiculo", catalog = "postgres", schema = "public")
-public class Veiculo implements Serializable {
+public class Veiculo extends Entidade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Integer id;
 
@@ -26,7 +26,7 @@ public class Veiculo implements Serializable {
     private String descricao;
 
     @Column(name = "fator_multiplicador", precision = 12, scale = 2)
-    private BigDecimal fatorMultiplicador;
+    private Double fatorMultiplicador;
 
     public Integer getId() {
         return id;
@@ -44,11 +44,11 @@ public class Veiculo implements Serializable {
         this.descricao = descricao;
     }
 
-    public BigDecimal getFatorMultiplicador() {
+    public Double getFatorMultiplicador() {
         return fatorMultiplicador;
     }
 
-    public void setFatorMultiplicador(BigDecimal fatorMultiplicador) {
+    public void setFatorMultiplicador(Double fatorMultiplicador) {
         this.fatorMultiplicador = fatorMultiplicador;
     }
 

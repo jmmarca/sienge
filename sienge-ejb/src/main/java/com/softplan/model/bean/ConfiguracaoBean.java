@@ -5,7 +5,8 @@
  */
 package com.softplan.model.bean;
 
-import com.softplan.model.entidade.SimulacaoItem;
+import com.softplan.model.entidade.Configuracao;
+import com.softplan.model.entidade.Veiculo;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author Michel
  */
 @Stateless
-public class SimulacaoItemFacade extends AbstractBean<SimulacaoItem> {
+public class ConfiguracaoBean extends AbstractBean<Configuracao> {
 
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,8 +26,8 @@ public class SimulacaoItemFacade extends AbstractBean<SimulacaoItem> {
         return em;
     }
 
-    public SimulacaoItemFacade() {
-        super(SimulacaoItem.class);
+    public ConfiguracaoBean() {
+        super(Configuracao.class);
     }
-    
+
 }

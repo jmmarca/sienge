@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/index.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Configurações"></h:outputText>
+        </ui:define>  
+        <ui:define name="conteudo">    
+
+            <p:dataTable id="dtConfig" value="#{configuracaoController.listaConfiguracoes}" var="item"
+                         selectionMode="single" selection="#{configuracaoController.selecionado}"
+                         paginator="true"
+                         rowKey="#{item.id}"
+                         rows="10"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="Nenhum registro encontrado"
+                         >
+
+                <p:ajax event="rowSelect"   update="@(.createButton), @(.deleteButton), @this" global="false"/>
+                <p:ajax event="rowUnselect" update="@(.createButton), @(.deleteButton), @this" global="false"/>
+
+                <p:ajax event="rowDblselect" update="formGeral:display, @this" oncomplete="PF('dlgConfigCadastro').show()" global="false"/> 
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Chave"/>
+                    </f:facet>
+                    <h:outputText value="#{item.chave}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Valor"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valor}" ></h:outputText>
+                </p:column>
+
+                <f:facet name="header">
+                    <div style="float: right;">
+                        <p:commandButton id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{configuracaoController.novaConfiguracao()}" update="formGeral:display" oncomplete="PF('dlgConfigCadastro').show()" />
+                        <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{configuracaoController.remover()}" update=":msg,dtConfig" disabled="#{empty selecionado}"/>
+                    </div>
+                    <div style="clear: both;"/>
+                </f:facet>
+            </p:dataTable>
+
+            <ui:include src="cadastro.xhtml" />
+
+        </ui:define>
+    </ui:composition>
+
+</html>

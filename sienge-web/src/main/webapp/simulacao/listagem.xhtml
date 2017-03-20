@@ -17,7 +17,7 @@
             <h:form id="SimulacaoListForm">
 
                 <p:dataTable id="datalist" value="#{simulacaoController.listaSimulacoes}" var="item"
-                             selectionMode="single" selection="#{simulacaoController.selecionada}"
+                             selectionMode="single" selection="#{simulacaoController.simulacaoSelecionada}"
                              paginator="true"
                              rowKey="#{item.id}"
                              rows="10"
@@ -52,7 +52,7 @@
                     <f:facet name="header">
                         <div style="float: right;">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="Cadastrar" actionListener="#{simulacaoController.novaSimulacao}" update=":idSimulacaoForm" oncomplete="PF('dlgSimulacaoDialog').show()"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{simulacaoController.remover}" update=":growl,datalist" disabled="#{empty simulacaoController.selecionada}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Remover" actionListener="#{simulacaoController.remover}" update=":msg,datalist" disabled="#{empty simulacaoCosimulacaoSelecionadalecionada}"/>
                         </div>
                         <div style="clear: both;"/>                        
                     </f:facet>

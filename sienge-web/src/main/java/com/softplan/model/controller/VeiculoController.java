@@ -48,6 +48,7 @@ public class VeiculoController implements Serializable {
             if (!WebUtil.isValido()) {
                 listaVeiculos = null;
             }
+            selecionado = null;
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

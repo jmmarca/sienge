@@ -32,6 +32,12 @@ public class UsuarioBean extends AbstractBean<Usuario> {
         super(Usuario.class);
     }
 
+    /**
+     *
+     * @param usuario
+     * @param senha
+     * @return
+     */
     public Usuario logar(Usuario usuario, String senha) {
         try {
             CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();

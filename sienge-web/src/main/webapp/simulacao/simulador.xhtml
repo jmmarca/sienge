@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewAction action="#{simulacaoController.initView()}" />
+    </f:metadata>
+    <ui:composition template="/index.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Simulação de Viagem"></h:outputText>
+        </ui:define>
+        <ui:define name="conteudo">
+            <style>
+                .col1 {width: 150px;}
+                .valor {text-align: right}
+            </style>
+
+            <p:outputPanel id="pnlSimulacaoGeral">
+                <h:panelGroup rendered="#{simulacaoController.simulacaoSelecionada != null}">
+                    <p:panelGrid columns="2"  style="width: 100%" columnClasses="col1,col2">
+                        <p:outputLabel value="Veiculo" />
+                        <p:outputPanel id="pnlVeiculo">
+                            <p:commandButton update="idBuscaVeiculo" oncomplete="PF('dlgBuscaVeiculo').show();" icon="fa fa-search Fs20"/>
+                            <p:outputLabel rendered="#{empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="Selecione" />
+                            <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="#{simulacaoController.veiculoSelecionado.descricao}" />
+                            <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" value=" - Fator: #{simulacaoController.veiculoSelecionado.fatorMultiplicador}" />
+                        </p:outputPanel>
+                        <p:outputLabel value="Peso transportado"  />
+                        <p:inputText value="#{simulacaoController.pesoTransportado}" size="10" >
+                            <f:convertNumber integerOnly="true" />
+                            <p:ajax update="@this, msg" event="change" />
+                        </p:inputText>
+                        <p:outputLabel value="Dist. em Pavimento (KM)" title="Distância total percorrida em rodovias com pavimento" />
+                        <p:inputText value="#{simulacaoController.distanciaPavimentada}" >
+                            <f:convertNumber integerOnly="true" />
+                            <p:ajax update="@this, msg" event="change" />
+                        </p:inputText>
+                        <p:outputLabel value="Dist. em rodovia não pavimentada (KM)" title="Distância total percorrida em rodovias não pavimento" />
+                        <p:inputText value="#{simulacaoController.distanciaNaoPavimentada}" >                        
+                            <f:convertNumber integerOnly="true" />
+                            <p:ajax update="@this, msg" event="change" />
+                        </p:inputText>
+                    </p:panelGrid>
+                    <p:outputPanel style="float: left">
+                        <p:commandButton value="Calcular" actionListener="#{simulacaoController.adicionarItem()}" update="formGeral:pnlSimulacaoGeral, msg" icon="fa fa-gears"/>
+                    </p:outputPanel>                     
+                    <p:outputPanel id="pnlItensSimulacao">
+                        <p:dataTable id="dtItensSimulacao" value="#{simulacaoController.simulacaoSelecionada.itensSimulacao}" 
+                                     var="item"
+                                     paginator="true"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     paginatorPosition="bottom"
+                                     emptyMessage="Nenhum Percurso Adicionado"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     editable="true" editMode="cell"
+                                     >
+                            <f:facet name="header">
+                                <p:outputPanel style="float: right;">
+                                    <p:commandButton value="Gravar Simulação" disabled="#{empty simulacaoController.simulacaoSelecionada.itensSimulacao}" actionListener="#{simulacaoController.salvar()}" update="formGeral:pnlSimulacaoGeral, msg" icon="fa fa-save" />
+                                </p:outputPanel>
+                                <p:outputPanel style="clear: both"/>
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Veículo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.veiculo.descricao}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Dist. em Pavimentada"/>
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.distanciaPavimento}" title="Click para editar" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{item.distanciaPavimento}" style="width:96%" label="Distância em Pavimentada" >
+                                            <p:ajax listener="#{simulacaoController.recalcular}" event="change" update="@this, :formGeral:pnlItensSimulacao, :msg" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>                            
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Dist. em Não Pavimentada"/>
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.distanciaSemPavimento}" title="Click para editar" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{item.distanciaSemPavimento}" style="width:96%" label="Distância em não Pavimentada" >
+                                            <p:ajax listener="#{simulacaoController.recalcular}" event="change" update="@this, :formGeral:pnlItensSimulacao, :msg" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>                            
+                            </p:column>  
+                            <p:column width="150" styleClass="valor">
+                                <f:facet name="header">
+                                    <h:outputText value="Valor em Pavimento"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valorPavimento}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>                            
+                            <p:column width="150" styleClass="valor">
+                                <f:facet name="header">
+                                    <h:outputText value="Valor em Não Pavimento"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valorSemPavimento}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="150" styleClass="valor">
+                                <f:facet name="header">
+                                    <h:outputText value="Valor Total"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valorTotal}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                </h:outputText>
+                                <f:facet name="footer">
+                                    <h:outputText value="Total R$: " />
+                                    <h:outputText value="#{simulacaoController.simulacaoSelecionada.valorTotal}" >
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>                            
+                            <p:column headerText="#" width="50">
+                                <p:commandButton icon="fa fa-trash" actionListener="#{simulacaoController.removerItem(item)}" title="Remover" update="dtItensSimulacao, msg"/>
+                            </p:column>
+                        </p:dataTable>  
+                    </p:outputPanel>
+                </h:panelGroup>
+
+                <p:dialog id="idBuscaVeiculo" widgetVar="dlgBuscaVeiculo" width="700" height="350" header="Selecione o Veículo">
+                    <ui:decorate template="/veiculo/listagem_base.xhtml">
+                        <ui:param name="busca" value="true" />
+                        <ui:param name="selecionado" value="#{simulacaoController.veiculoSelecionado}" />
+                        <ui:param name="updateSelecionado" value=":formGeral:pnlSimulacaoGeral"/>
+                        <ui:param name="onSelection" value="PF('dlgBuscaVeiculo').hide()"/>                        
+                    </ui:decorate>
+                </p:dialog> 
+            </p:outputPanel>
+
+        </ui:define>
+    </ui:composition>
+</html>
