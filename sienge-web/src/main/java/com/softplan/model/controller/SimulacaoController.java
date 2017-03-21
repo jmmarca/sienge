@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.context.FacesContext;
 
 @Named("simulacaoController")
 @SessionScoped
@@ -98,6 +100,13 @@ public class SimulacaoController implements Serializable {
         if (simulacaoSelecionada == null) {
             novaSimulacao();
         }
+        if (!simulacaoSelecionada.getItensSimulacao().isEmpty()) {
+            try {
+                simulacaoBean.calcularCustoViagem(simulacaoSelecionada);
+            } catch (AppException ex) {
+                WebUtil.addMsgErro(ex.getMessage());
+            }
+        }
     }
 
     public void salvar() {
@@ -179,10 +188,6 @@ public class SimulacaoController implements Serializable {
         }
     }
 
-    public void onCellEdit() {
-
-    }
-
     public void recalcular() {
         try {
             simulacaoSelecionada = simulacaoBean.calcularCustoViagem(simulacaoSelecionada);
@@ -192,6 +197,12 @@ public class SimulacaoController implements Serializable {
             ex.printStackTrace();
             WebUtil.addMsgErro("Erro ao efetuar cálculo");
         }
+    }
+
+    public void onRowDblSelect() {
+        //redireciona para edição
+        ConfigurableNavigationHandler handler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+        handler.performNavigation("simulador?faces-redirect=true");
     }
 
 }

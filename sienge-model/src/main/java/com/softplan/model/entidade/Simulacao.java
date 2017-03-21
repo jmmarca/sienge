@@ -38,7 +38,7 @@ public class Simulacao extends Entidade {
     @JoinColumn(name = "ID_USUARIO")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "simulacao")
+    @OneToMany(mappedBy = "simulacao", orphanRemoval = true, cascade = {CascadeType.ALL})
     private List<SimulacaoItem> itensSimulacao;
 
     @Transient

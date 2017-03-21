@@ -11,10 +11,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 
 @Named("veiculoController")
 @SessionScoped
@@ -75,59 +71,6 @@ public class VeiculoController implements Serializable {
             listaVeiculos = veiculoBean.listarTodos();
         }
         return listaVeiculos;
-    }
-
-    public Veiculo getVeiculo(Integer id) {
-        return veiculoBean.encontrar(id);
-    }
-
-    public List<Veiculo> getItemsAvailableSelectMany() {
-        return veiculoBean.listarTodos();
-    }
-
-    public List<Veiculo> getItemsAvailableSelectOne() {
-        return veiculoBean.listarTodos();
-    }
-
-    @FacesConverter(forClass = Veiculo.class)
-    public static class VeiculoControllerConverter implements Converter {
-
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-            }
-            VeiculoController controller = (VeiculoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "veiculoController");
-            return controller.getVeiculo(getKey(value));
-        }
-
-        Integer getKey(String value) {
-            Integer key;
-            key = Integer.valueOf(value);
-            return key;
-        }
-
-        String getStringKey(Integer value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof Veiculo) {
-                Veiculo o = (Veiculo) object;
-                return getStringKey(o.getId());
-            } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Veiculo.class.getName()});
-                return null;
-            }
-        }
-
     }
 
 }

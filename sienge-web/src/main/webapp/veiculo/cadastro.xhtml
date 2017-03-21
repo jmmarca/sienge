@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        <p:dialog id="idDlgVeiculoCadastro" widgetVar="dlgVeiculoCadastro" modal="true" resizable="false" header="Cadastro de Veículo" width="400" height="400">
+        <p:dialog id="idDlgVeiculoCadastro" widgetVar="dlgVeiculoCadastro" modal="true" resizable="false" header="Cadastro de Veículo" width="400" height="400" closeOnEscape="true">
             <h:panelGroup id="display">
                 <p:panelGrid columns="2" rendered="#{veiculoController.selecionado != null}">
                     <p:outputLabel value="Descrição" for="descricao" />
@@ -14,7 +14,7 @@
                     <p:outputLabel value="Fator Multiplicador" for="fatorMultiplicador" />
                     <p:inputNumber id="fatorMultiplicador" value="#{veiculoController.selecionado.fatorMultiplicador}" title="Fator Multiplicador" />
                 </p:panelGrid>
-                <p:commandButton process="display" actionListener="#{veiculoController.salvar()}" value="Salvar" update="display,:msg,dtRodoviaPreco" oncomplete="PF('dlgVeiculoCadastro').hide()" />
+                <p:commandButton process="display" actionListener="#{veiculoController.salvar()}" value="Salvar" update="display,:msg,dtVeiculo" oncomplete="PF('dlgVeiculoCadastro').hide()" />
                 <p:commandButton value="Cancelar" onclick="PF('dlgVeiculoCadastro').hide()"/>
             </h:panelGroup>
         </p:dialog>

@@ -6,15 +6,15 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        <p:dialog id="idDlgConfigCadastro" widgetVar="dlgConfigCadastro" modal="true" resizable="false" header="Cadastro de Veículo" width="400" height="400">
+        <p:dialog id="idDlgConfigCadastro" widgetVar="dlgConfigCadastro" modal="true" resizable="false" header="Cadastro de Configuração" width="400" height="400" closeOnEscape="true">
             <h:panelGroup id="display">
                 <p:panelGrid columns="2" rendered="#{configuracaoController.selecionado != null}">
-                    <p:outputLabel value="chave" />
+                    <p:outputLabel value="Chave" />
                     <p:inputText value="#{configuracaoController.selecionado.chave}" />
-                    <p:outputLabel value="valor"  />
-                    <p:inputNumber value="#{configuracaoController.selecionado.valor}" />
+                    <p:outputLabel value="Valor"  />
+                    <p:inputText value="#{configuracaoController.selecionado.valor}" />
                 </p:panelGrid>
-                <p:commandButton process="display" actionListener="#{configuracaoController.salvar()}" value="Salvar" update="display,:msg" oncomplete="PF('dlgConfigCadastro').hide()" />
+                <p:commandButton process="display" actionListener="#{configuracaoController.salvar()}" value="Salvar" update="display,:msg, dtConfig" oncomplete="PF('dlgConfigCadastro').hide()" />
                 <p:commandButton value="Cancelar" onclick="PF('dlgConfigCadastro').hide()"/>
             </h:panelGroup>
         </p:dialog>

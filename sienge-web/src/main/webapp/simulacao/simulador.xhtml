@@ -14,39 +14,53 @@
         </ui:define>
         <ui:define name="conteudo">
             <style>
-                .col1 {width: 150px;}
-                .valor {text-align: right}
+                .col1 {width: 250px; text-align: right; }
+                .valor {text-align: right}    
+                .ui-click {cursor: pointer}
             </style>
 
             <p:outputPanel id="pnlSimulacaoGeral">
                 <h:panelGroup rendered="#{simulacaoController.simulacaoSelecionada != null}">
-                    <p:panelGrid columns="2"  style="width: 100%" columnClasses="col1,col2">
-                        <p:outputLabel value="Veiculo" />
-                        <p:outputPanel id="pnlVeiculo">
-                            <p:commandButton update="idBuscaVeiculo" oncomplete="PF('dlgBuscaVeiculo').show();" icon="fa fa-search Fs20"/>
-                            <p:outputLabel rendered="#{empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="Selecione" />
-                            <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="#{simulacaoController.veiculoSelecionado.descricao}" />
-                            <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" value=" - Fator: #{simulacaoController.veiculoSelecionado.fatorMultiplicador}" />
+                    <!--formulario-->
+                    <p:outputPanel style="width: 100%;">
+                        <p:panelGrid columns="2"  style="width: 100%;border-width: 0px;" columnClasses="col1,col2" styleClass="gridSimulacao">
+                            <p:outputLabel value="Veículo" />
+                            <p:outputPanel id="pnlVeiculo">
+                                <p:commandButton update="idBuscaVeiculo" oncomplete="PF('dlgBuscaVeiculo').show();" icon="fa fa-search Fs20"/>
+                                <p:outputLabel rendered="#{empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="Selecione" />
+                                <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" style="margin-left: 5px;" value="#{simulacaoController.veiculoSelecionado.descricao}" />
+                                <p:outputLabel rendered="#{not empty simulacaoController.veiculoSelecionado}" value=" - Fator: #{simulacaoController.veiculoSelecionado.fatorMultiplicador}" />
+                            </p:outputPanel>
+                            <p:outputLabel value="Peso transportado"  />
+                            <p:inputText value="#{simulacaoController.pesoTransportado}" size="10" >
+                                <f:convertNumber integerOnly="true" />
+                                <p:ajax update="@this, msg" event="change" />
+                            </p:inputText>
+                            <p:outputLabel value="Dist. em Pavimento (KM)" title="Distância total percorrida em rodovias com pavimento"  styleClass="ui-click"/>
+                            <p:inputText value="#{simulacaoController.distanciaPavimentada}" size="10">
+                                <f:convertNumber integerOnly="true" />
+                                <p:ajax update="@this, msg" event="change" />
+                            </p:inputText>
+                            <p:outputLabel value="Dist. em Não Pavimentada (KM)" title="Distância total percorrida em rodovias não pavimento" styleClass="ui-click" />
+                            <p:inputText value="#{simulacaoController.distanciaNaoPavimentada}" size="10">                        
+                                <f:convertNumber integerOnly="true" />
+                                <p:ajax update="@this, msg" event="change" />
+                            </p:inputText>
+                            <p:outputLabel value="Registrado às" rendered="#{not empty simulacaoController.simulacaoSelecionada.id}"/>
+                            <h:outputText value="#{simulacaoController.simulacaoSelecionada.dhRegistro}" rendered="#{not empty simulacaoController.simulacaoSelecionada.id}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                            <p:outputLabel value="Usuário"  rendered="#{not empty simulacaoController.simulacaoSelecionada.id}" />
+                            <h:outputText value="#{simulacaoController.simulacaoSelecionada.usuario.nome}" rendered="#{not empty simulacaoController.simulacaoSelecionada.id}"/>                  
+                        </p:panelGrid>
+                        <p:outputPanel style="float: right">
+                            <p:commandButton value="Calcular" styleClass="btn btn-primary" actionListener="#{simulacaoController.adicionarItem()}" update="formGeral:pnlSimulacaoGeral, msg" icon="fa fa-gears" style="margin-right: 10px; margin-top: 5px;"/>
                         </p:outputPanel>
-                        <p:outputLabel value="Peso transportado"  />
-                        <p:inputText value="#{simulacaoController.pesoTransportado}" size="10" >
-                            <f:convertNumber integerOnly="true" />
-                            <p:ajax update="@this, msg" event="change" />
-                        </p:inputText>
-                        <p:outputLabel value="Dist. em Pavimento (KM)" title="Distância total percorrida em rodovias com pavimento" />
-                        <p:inputText value="#{simulacaoController.distanciaPavimentada}" >
-                            <f:convertNumber integerOnly="true" />
-                            <p:ajax update="@this, msg" event="change" />
-                        </p:inputText>
-                        <p:outputLabel value="Dist. em rodovia não pavimentada (KM)" title="Distância total percorrida em rodovias não pavimento" />
-                        <p:inputText value="#{simulacaoController.distanciaNaoPavimentada}" >                        
-                            <f:convertNumber integerOnly="true" />
-                            <p:ajax update="@this, msg" event="change" />
-                        </p:inputText>
-                    </p:panelGrid>
-                    <p:outputPanel style="float: left">
-                        <p:commandButton value="Calcular" actionListener="#{simulacaoController.adicionarItem()}" update="formGeral:pnlSimulacaoGeral, msg" icon="fa fa-gears"/>
-                    </p:outputPanel>                     
+                        <p:outputPanel style="clear: both"/>
+                    </p:outputPanel>
+                    <br/>
+
+                    <!--listamgem (itens)-->
                     <p:outputPanel id="pnlItensSimulacao">
                         <p:dataTable id="dtItensSimulacao" value="#{simulacaoController.simulacaoSelecionada.itensSimulacao}" 
                                      var="item"
@@ -60,6 +74,7 @@
                                      >
                             <f:facet name="header">
                                 <p:outputPanel style="float: right;">
+                                    <p:commandButton icon="fa fa-list-alt" value="Listar Simulações" action="listagem?faces-redirect=true" />
                                     <p:commandButton value="Gravar Simulação" disabled="#{empty simulacaoController.simulacaoSelecionada.itensSimulacao}" actionListener="#{simulacaoController.salvar()}" update="formGeral:pnlSimulacaoGeral, msg" icon="fa fa-save" />
                                 </p:outputPanel>
                                 <p:outputPanel style="clear: both"/>
@@ -96,18 +111,18 @@
                             </p:column>  
                             <p:column width="150" styleClass="valor">
                                 <f:facet name="header">
-                                    <h:outputText value="Valor em Pavimento"/>
+                                    <h:outputText value="Vrl. Pavimentada"/>
                                 </f:facet>
                                 <h:outputText value="#{item.valorPavimento}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                    <f:convertNumber type="currency" />
                                 </h:outputText>
                             </p:column>                            
                             <p:column width="150" styleClass="valor">
                                 <f:facet name="header">
-                                    <h:outputText value="Valor em Não Pavimento"/>
+                                    <h:outputText value="Vrl. Não Pavimentada"/>
                                 </f:facet>
                                 <h:outputText value="#{item.valorSemPavimento}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                   <f:convertNumber type="currency" />
                                 </h:outputText>
                             </p:column>
                             <p:column width="150" styleClass="valor">
@@ -130,8 +145,8 @@
                         </p:dataTable>  
                     </p:outputPanel>
                 </h:panelGroup>
-
-                <p:dialog id="idBuscaVeiculo" widgetVar="dlgBuscaVeiculo" width="700" height="350" header="Selecione o Veículo">
+                <!--busca de veículo-->
+                <p:dialog id="idBuscaVeiculo" widgetVar="dlgBuscaVeiculo" width="800" height="400" header="Selecione o Veículo" closeOnEscape="true">
                     <ui:decorate template="/veiculo/listagem_base.xhtml">
                         <ui:param name="busca" value="true" />
                         <ui:param name="selecionado" value="#{simulacaoController.veiculoSelecionado}" />

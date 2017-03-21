@@ -5,23 +5,20 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/admin.xhtml">
-
     <ui:define name="head">
+        #{loginController.verificaSessao()}
         <title>Sistema Sienge</title>
-        <h:head>
-        </h:head>
     </ui:define>
-
+    <!--logo sienge-->
     <ui:define name="logo-lg">
         <p:graphicImage url="/resources/img/logo-sienge.png" />
     </ui:define>
-
+    <!--abreviação-->
     <ui:define name="logo-mini">
         SG
     </ui:define>
-
+    <!--menu esquerdo-->
     <ui:define name="menu">
-        #{loginController.verificaSessao()}
         <ul class="sidebar-menu">
             <li>
                 <p:link href="/" onclick="clearBreadCrumbs()">
@@ -52,37 +49,31 @@
             </li>            
         </ul>
     </ui:define>
-
+    <!-- menu top-->
     <ui:define name="top-menu">
         <ui:include src="top-menu.xhtml"/>
     </ui:define>
-
-    <ui:define name="title">
-    </ui:define>
-
+    <!-- descritor por página -->
     <ui:define name="description">
         <p:growl id="msg" />
     </ui:define>
 
+    <!-- conteúdo -->
     <ui:define name="body">
         <h:form id="formGeral">
             <ui:insert name="conteudo"></ui:insert>
         </h:form>
     </ui:define>
-
-
+    <!-- rodapé -->
     <ui:define name="footer">
-        <a target="_blank"
-           href="https://www.sienge.com.br">
+        <p:link target="_blank"  href="https://www.sienge.com.br">
             Sienge Web
-        </a>
-        <div class="pull-right hidden-xs" style="color: gray; height: 20px;">
-            <a target="_blank"
-               href="https://github.com/jmmarca/sienge" class="fa fa-github Fs20">
+        </p:link>
+        <p:outputPanel styleClass="pull-right hidden-xs" style="color: gray; height: 20px;">
+            <p:link target="_blank"
+                    href="https://github.com/jmmarca/sienge" class="fa fa-github Fs20">
                 <i>1.0.0</i>
-            </a>
-        </div>
+            </p:link>
+        </p:outputPanel>
     </ui:define>
-
-
 </ui:composition>
