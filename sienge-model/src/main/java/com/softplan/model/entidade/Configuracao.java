@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author Michel
  */
 @javax.persistence.Entity(name = "configuracao")
-@Table(catalog = "postgres", schema = "public")
+@Table(catalog = "postgres")
 public class Configuracao extends Entidade {
 
     @Id

@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * @author operador
  */
 @Entity(name = "usuario")
-@Table(catalog = "postgres", schema = "public")
+@Table(catalog = "postgres")
 public class Usuario extends Entidade {
 
     @Id

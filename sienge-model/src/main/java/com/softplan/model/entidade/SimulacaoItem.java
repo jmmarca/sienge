@@ -17,7 +17,7 @@ import javax.persistence.Transient;
  * @author Michel
  */
 @Entity
-@Table(name = "simulacao_item", catalog = "postgres", schema = "public")
+@Table(name = "simulacao_item", catalog = "postgres")
 
 public class SimulacaoItem extends Entidade {
 
