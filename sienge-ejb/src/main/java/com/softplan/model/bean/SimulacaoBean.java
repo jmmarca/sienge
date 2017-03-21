@@ -36,6 +36,9 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
      * @return
      */
     public Simulacao calcularCustoViagem(Simulacao simulacao) throws AppException {
+        
+        final List<Simulacao> listarTodos = listarTodos();
+        
         //itens por tipo de via
         final List<SimulacaoItem> itensSimulacao = simulacao.getItensSimulacao();
         Double total = 0d;
