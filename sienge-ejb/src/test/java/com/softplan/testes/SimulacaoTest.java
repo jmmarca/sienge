@@ -1,5 +1,6 @@
 package com.softplan.testes;
         
+import com.softplan.model.bean.ConfiguracaoBean;
 import com.softplan.model.bean.SimulacaoBean;
 import com.softplan.model.classe.SimulacaoConfiguracaoPojo;
 import com.softplan.model.entidade.Simulacao;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.EJB;
+import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
@@ -28,10 +31,14 @@ import org.junit.runner.RunWith;
  * @author Michel
  */
 @RunWith(Arquillian.class)
+@Transactional
 public class SimulacaoTest {
 
     @EJB
     private SimulacaoBean simulacaoBean;
+    
+    @EJB
+    private ConfiguracaoBean configuracaoBean;
 
     private SimulacaoConfiguracaoPojo config;
 
@@ -113,8 +120,8 @@ public class SimulacaoTest {
 
     @Test
     @InSequence(1)
+    @Transactional(TransactionMode.ROLLBACK)
     public void testeSimulacao() throws AppException {
-
         //Teste Unitário, acessando EJB e validando item a item
         for (Map.Entry<SimulacaoItem, Double> entry : mapaSimulacaoItemResultado.entrySet()) {
             Simulacao simulacao = new Simulacao();

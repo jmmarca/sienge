@@ -142,7 +142,12 @@
                     <artifactId>glassfish-embedded-all</artifactId>
                     <version>3.1.1</version>
                     <scope>test</scope>
-                </dependency>   
+                </dependency>  
+                <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-transaction-jta</artifactId>
+                    <version>1.0.0.Alpha3</version>
+                </dependency>                 
             </dependencies>
             <build>
                 <testResources>
