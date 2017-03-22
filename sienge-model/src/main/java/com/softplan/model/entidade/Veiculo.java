@@ -1,7 +1,6 @@
 package com.softplan.model.entidade;
 
 import com.softplan.model.generic.Entidade;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +13,7 @@ import javax.persistence.Table;
  * @author Michel
  */
 @Entity
-@Table(name = "veiculo", catalog = "postgres")
+@Table(name = "veiculo")
 public class Veiculo extends Entidade {
 
     @Id
@@ -61,7 +60,6 @@ public class Veiculo extends Entidade {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Veiculo)) {
             return false;
         }

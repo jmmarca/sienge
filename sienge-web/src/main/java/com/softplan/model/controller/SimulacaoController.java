@@ -3,6 +3,7 @@ package com.softplan.model.controller;
 import com.softplan.model.entidade.Simulacao;
 import com.softplan.model.util.WebUtil;
 import com.softplan.model.bean.SimulacaoBean;
+import com.softplan.model.classe.SimulacaoConfiguracaoPojo;
 import com.softplan.model.entidade.SimulacaoItem;
 import com.softplan.model.entidade.Veiculo;
 import com.softplan.model.generic.AppException;
@@ -36,6 +37,8 @@ public class SimulacaoController implements Serializable {
     private Integer distanciaNaoPavimentada;
 
     private Integer distanciaPavimentada;
+
+    private SimulacaoConfiguracaoPojo simulacaoConfig;
 
     public Integer getPesoTransportado() {
         return pesoTransportado;
@@ -101,11 +104,7 @@ public class SimulacaoController implements Serializable {
             novaSimulacao();
         }
         if (!simulacaoSelecionada.getItensSimulacao().isEmpty()) {
-            try {
-                simulacaoBean.calcularCustoViagem(simulacaoSelecionada);
-            } catch (AppException ex) {
-                WebUtil.addMsgErro(ex.getMessage());
-            }
+            recalcular();
         }
     }
 
@@ -190,7 +189,11 @@ public class SimulacaoController implements Serializable {
 
     public void recalcular() {
         try {
-            simulacaoSelecionada = simulacaoBean.calcularCustoViagem(simulacaoSelecionada);
+            if (simulacaoConfig == null) {
+                simulacaoConfig = simulacaoBean.getNewConfigSimulacao();
+            }
+
+            simulacaoSelecionada = simulacaoBean.calcularCustoViagem(simulacaoSelecionada, simulacaoConfig);
         } catch (AppException ex) {
             WebUtil.addMsgErro(ex.getMessage());
         } catch (Exception ex) {

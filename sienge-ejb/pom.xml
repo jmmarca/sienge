@@ -17,7 +17,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -66,7 +66,55 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>sienge-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Arquillian JUnit Container -->
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>     
+        
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <version>1.0.0.Final</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-api</artifactId>
+            <version>1.1.Final</version>
+            <scope>test</scope>
+        </dependency>  
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+            <version>1.0.0.CR3</version>
+            <scope>test</scope>
+        </dependency>        
+        <!-- https://mvnrepository.com/artifact/org.glassfish.extras/glassfish-embedded-all -->
+        <dependency>
+            <groupId>org.glassfish.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>3.1.1</version>
+            <scope>test</scope>
+        </dependency>                 
+    </dependencies>
+       
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -77,60 +125,53 @@
                 <type>pom</type>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>    
     <profiles>
-        <!-- clip -->
         <profile>
-            <id>arquillian-glassfish</id>
+            <id>arquillian-glassfish-embedded</id>
             <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec</groupId>
-                    <artifactId>jboss-javaee-6.0</artifactId>
-                    <version>1.0.0.Final</version>
-                    <type>pom</type>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.weld</groupId>
-                    <artifactId>weld-api</artifactId>
-                    <version>1.1.Final</version>
-                    <scope>test</scope>
-                </dependency>
-                <!-- Arquillian JUnit Container -->
-                <dependency>
-                    <groupId>org.jboss.arquillian.junit</groupId>
-                    <artifactId>arquillian-junit-container</artifactId>
-                    <scope>test</scope>
-                </dependency>                
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
                     <version>1.0.0.CR3</version>
                     <scope>test</scope>
-                </dependency>
+                </dependency>        
                 <!-- https://mvnrepository.com/artifact/org.glassfish.extras/glassfish-embedded-all -->
                 <dependency>
                     <groupId>org.glassfish.extras</groupId>
                     <artifactId>glassfish-embedded-all</artifactId>
                     <version>3.1.1</version>
                     <scope>test</scope>
-                </dependency>
-               
-                <dependency>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                    <version>4.11</version>
-                    <scope>test</scope>
-                </dependency>
+                </dependency>   
             </dependencies>
+            <build>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/resources-glassfish-embedded</directory>
+                    </testResource>
+                </testResources>
+                <plugins>
+                    <!-- The surefire plugin is configured to pass a system property to 
+                    GlassFish to retarget the derby log file -->
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.12</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <java.util.logging.config.file>
+                                    ${project.build.testOutputDirectory}/logging.properties
+                                </java.util.logging.config.file>
+                                <derby.stream.error.file>
+                                    ${project.build.directory}/derby.log
+                                </derby.stream.error.file>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
-        <!-- clip -->
-    </profiles>    
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sienge-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    </profiles>              
 </project>

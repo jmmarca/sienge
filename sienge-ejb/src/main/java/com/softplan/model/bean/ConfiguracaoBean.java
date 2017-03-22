@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.softplan.model.bean;
 
 import com.softplan.model.entidade.Configuracao;
-import com.softplan.model.entidade.Veiculo;
+import com.softplan.model.generic.AppException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -28,6 +24,18 @@ public class ConfiguracaoBean extends AbstractBean<Configuracao> {
 
     public ConfiguracaoBean() {
         super(Configuracao.class);
+    }
+
+    public Configuracao encontrarPorChave(String chave) throws AppException {
+        try {
+            javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Configuracao.class));
+            javax.persistence.Query q = getEntityManager().createQuery(cq);
+            q.setParameter("chave", chave);
+            return (Configuracao) q.getSingleResult();
+        } catch (NoResultException e) {
+            throw new AppException("Não foi encontrada configuração com a chave: " + chave);
+        }
     }
 
 }

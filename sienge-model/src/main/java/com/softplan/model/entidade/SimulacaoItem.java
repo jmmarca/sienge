@@ -1,7 +1,6 @@
 package com.softplan.model.entidade;
 
 import com.softplan.model.generic.Entidade;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import javax.persistence.Transient;
  * @author Michel
  */
 @Entity
-@Table(name = "simulacao_item", catalog = "postgres")
+@Table(name = "simulacao_item")
 
 public class SimulacaoItem extends Entidade {
 
@@ -34,10 +33,10 @@ public class SimulacaoItem extends Entidade {
     private Integer pesoCarga;
 
     @Column(name = "distancia_pavimento", precision = 12, scale = 2)
-    private Integer distanciaPavimento;
+    private Integer distanciaPavimento = 0;
 
     @Column(name = "distancia_nao_pavimento", precision = 12, scale = 2)
-    private Integer distanciaSemPavimento;
+    private Integer distanciaSemPavimento = 0;
 
     @Column(name = "valor_pavimento", precision = 12, scale = 2)
     private Double valorPavimento;

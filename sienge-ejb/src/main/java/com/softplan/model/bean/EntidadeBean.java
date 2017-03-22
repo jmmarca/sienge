@@ -62,19 +62,18 @@ public class EntidadeBean extends AbstractBean<Entidade> {
 
         Veiculo veiculo = new Veiculo();
         veiculo.setDescricao("Caminhão baú");
-        veiculo.setFatorMultiplicador(new Double("1.00"));
+        veiculo.setFatorMultiplicador(1.00);
         salvar(veiculo);
 
         veiculo = new Veiculo();
         veiculo.setDescricao("Caminhão caçamba");
-        veiculo.setFatorMultiplicador(new Double("1.05"));
+        veiculo.setFatorMultiplicador(1.05);
         salvar(veiculo);
-
+        
         veiculo = new Veiculo();
         veiculo.setDescricao("Carreta");
-        veiculo.setFatorMultiplicador(new Double("1.12"));
+        veiculo.setFatorMultiplicador(1.12);
         salvar(veiculo);
-
     }
 
 }

@@ -58,4 +58,53 @@
             <type>war</type>
         </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>arquillian-glassfish-embedded</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+                    <version>1.0.0.CR3</version>
+                    <scope>test</scope>
+                </dependency>        
+                <!-- https://mvnrepository.com/artifact/org.glassfish.extras/glassfish-embedded-all -->
+                <dependency>
+                    <groupId>org.glassfish.extras</groupId>
+                    <artifactId>glassfish-embedded-all</artifactId>
+                    <version>3.1.1</version>
+                    <scope>test</scope>
+                </dependency>   
+            </dependencies>
+            <build>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/resources-glassfish-embedded</directory>
+                    </testResource>
+                </testResources>
+                <plugins>
+                    <!-- The surefire plugin is configured to pass a system property to 
+                    GlassFish to retarget the derby log file -->
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.12</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <java.util.logging.config.file>
+                                    ${project.build.testOutputDirectory}/logging.properties
+                                </java.util.logging.config.file>
+                                <derby.stream.error.file>
+                                    ${project.build.directory}/derby.log
+                                </derby.stream.error.file>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>         
 </project>

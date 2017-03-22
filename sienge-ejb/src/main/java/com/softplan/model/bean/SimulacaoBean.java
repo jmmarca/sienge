@@ -1,5 +1,7 @@
 package com.softplan.model.bean;
 
+import com.softplan.model.classe.SimulacaoConfiguracaoPojo;
+import com.softplan.model.entidade.Configuracao;
 import com.softplan.model.entidade.Simulacao;
 import com.softplan.model.entidade.SimulacaoItem;
 import com.softplan.model.entidade.Veiculo;
@@ -7,6 +9,7 @@ import com.softplan.model.generic.AppException;
 import com.softplan.model.util.Functions;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,9 +24,16 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
     @PersistenceContext(unitName = "sienge-1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    @EJB
+    private ConfiguracaoBean configuracaoBean;
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
     }
 
     public SimulacaoBean() {
@@ -33,13 +43,12 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
     /**
      *
      * @param simulacao
+     * @param config
      * @return
      */
-    public Simulacao calcularCustoViagem(Simulacao simulacao) throws AppException {
-        
-        final List<Simulacao> listarTodos = listarTodos();
-        
-        //itens por tipo de via
+    public Simulacao calcularCustoViagem(Simulacao simulacao, SimulacaoConfiguracaoPojo config) throws AppException {
+
+        //itens por tipo de rodovia
         final List<SimulacaoItem> itensSimulacao = simulacao.getItensSimulacao();
         Double total = 0d;
         for (SimulacaoItem simulacaoItem : itensSimulacao) {
@@ -60,23 +69,21 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
 
             if (distanciaNaoPavimentada > 0 || distanciaPavimentada > 0) {
                 //Custo do Km rodado
-                Double custoRodoviaNaoPavimentada = 0.62;
-                Double custoRodoviaPavimentada = 0.54;
+                Double custoRodoviaNaoPavimentada = config.getValorRodoviaNaoPavimentada();
+                Double custoRodoviaPavimentada = config.getValorRodoviaPavimentada();
 
-                Double valorRodoviaPavimentada = calcularPorTipoRodovia(custoRodoviaPavimentada, distanciaPavimentada, fatorMultiplicador, peso);
-                Double valorRodoviaNaoPavimentada = calcularPorTipoRodovia(custoRodoviaNaoPavimentada, distanciaNaoPavimentada, fatorMultiplicador, peso);
+                Double valorRodoviaPavimentada = calcularPorTipoRodovia(config, custoRodoviaPavimentada, distanciaPavimentada, fatorMultiplicador, peso);
+                Double valorRodoviaNaoPavimentada = calcularPorTipoRodovia(config, custoRodoviaNaoPavimentada, distanciaNaoPavimentada, fatorMultiplicador, peso);
                 simulacaoItem.setValorPavimento(valorRodoviaPavimentada);
                 simulacaoItem.setValorSemPavimento(valorRodoviaNaoPavimentada);
-                simulacaoItem.setValorTotal(valorRodoviaPavimentada + valorRodoviaNaoPavimentada);
+                simulacaoItem.setValorTotal(Functions.round(valorRodoviaPavimentada + valorRodoviaNaoPavimentada, 2));
                 total += (simulacaoItem.getValorTotal());
             } else {
                 simulacaoItem.setDistanciaPavimento(0);
                 simulacaoItem.setDistanciaSemPavimento(0);
                 simulacaoItem.setValorTotal(0d);
             }
-
         }
-
         simulacao.setValorTotal(total);
 
         return simulacao;
@@ -93,18 +100,35 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
      * @param peso
      * @return
      */
-    private Double calcularPorTipoRodovia(Double custoKmRodado, Integer distanciaPercorrida, Double fatorMultiplicador, Integer peso) {
-
+    private Double calcularPorTipoRodovia(SimulacaoConfiguracaoPojo config, Double custoKmRodado, Integer distanciaPercorrida, Double fatorMultiplicador, Integer peso) {
         Double valorCalculado = distanciaPercorrida * (custoKmRodado);
         valorCalculado *= fatorMultiplicador;
-        valorCalculado = Functions.round(valorCalculado, 2);
         //Adiciona a diferença por excesso de peso por km rodado
-        if (peso > 5) {
-            Integer diff = peso - 5;
-            Double excedente = diff * 0.02;
+        if (peso > config.getLimitePeso()) {
+            //Diferença de excesso de peso
+            Integer diff = peso - config.getLimitePeso();
+            //Valor de acordo com o excesso de peso da carga
+            Double excedente = diff * config.getValorExcessoCarga();
+            //Adicionar o excesso ao valor de acordo com a distância percorrida
             valorCalculado += (distanciaPercorrida * excedente);
         }
+        valorCalculado = Functions.round(valorCalculado, 2);
         return valorCalculado;
+    }
+
+    public SimulacaoConfiguracaoPojo getNewConfigSimulacao() throws AppException {
+        Configuracao valorRodoviaPavimentada = configuracaoBean.encontrarPorChave("valor_pavimentada");
+        Configuracao valorRodoviaNaoPavimentada = configuracaoBean.encontrarPorChave("valor_pavimentada");
+        Configuracao limitePeso = configuracaoBean.encontrarPorChave("limite_peso");
+        Configuracao valorKmExcessoPeso = configuracaoBean.encontrarPorChave("valor_km_excesso_peso");
+
+        SimulacaoConfiguracaoPojo config = new SimulacaoConfiguracaoPojo();
+        config.setLimitePeso(Integer.valueOf(limitePeso.getValor()));
+        config.setValorExcessoCarga(Double.valueOf(valorKmExcessoPeso.getValor()));
+        config.setValorRodoviaNaoPavimentada(Double.valueOf(valorRodoviaNaoPavimentada.getValor()));
+        config.setValorRodoviaPavimentada(Double.valueOf(valorRodoviaPavimentada.getValor()));
+
+        return config;
     }
 
 }

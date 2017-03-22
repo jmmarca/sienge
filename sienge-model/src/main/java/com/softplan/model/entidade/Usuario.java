@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.softplan.model.entidade;
 
 import com.softplan.model.generic.Entidade;
@@ -15,22 +10,26 @@ import javax.persistence.Table;
 
 /**
  *
- * @author operador
+ * @author Michel
  */
-@Entity(name = "usuario")
-@Table(catalog = "postgres")
+@Entity
+@Table(name = "usuario")
 public class Usuario extends Entidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Integer id;
+
     @Column(name = "nome")
     private String nome;
+
     @Column(name = "login")
     private String login;
+
     @Column(name = "senha")
     private String senha;
+
     @Column(name = "email")
     private String email;
 
