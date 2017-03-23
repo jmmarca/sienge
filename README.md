@@ -1,4 +1,4 @@
-# sienge
+# Sienge
 O exercicio 1 está na pasta /sienge, foi utilizado maven. 
 
 Servidor de Aplicação:
