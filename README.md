@@ -1,5 +1,4 @@
 # sienge
-sienge
 O exercicio 1 está na pasta /sienge, foi utilizado maven. 
 
 Servidor de Aplicação:
@@ -14,6 +13,7 @@ Resultados de testes utilizando profile "arquillian-glassfish-embedded":
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
+<pre>
 Running com.softplan.testes.SimulacaoTest
 PlainTextActionReporterSUCCESSDescription: deploy AdminCommandnull
     [name=test
@@ -31,10 +31,14 @@ PER01003: Deployment encountered SQL Exceptions:
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.62 sec
 Results :
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+</pre>
 
-=======================================================================================================================
+
+-------------------------------------------------------
 O Exercicio 2 está na pasta teste2, com um arquivo leiame.doc.
+-------------------------------------------------------
 
+<pre>
 
 
 Segue a sequência de compilação do aplicativo.
@@ -53,4 +57,4 @@ Total time: 10.714s
 Finished at: Wed Mar 22 23:50:39 BRT 2017
 Final Memory: 18M/393M
 ------------------------------------------------------------------------
-
+</pre>
