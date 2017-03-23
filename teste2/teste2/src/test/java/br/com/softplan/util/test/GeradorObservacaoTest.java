@@ -1,6 +1,6 @@
+package br.com.softplan.util.test;
 
-
-import br.com.softplan.teste.GeradorObservacao;
+import br.com.softplan.util.GeradorObservacao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
