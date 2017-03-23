@@ -118,7 +118,7 @@ public class SimulacaoBean extends AbstractBean<Simulacao> {
 
     public SimulacaoConfiguracaoPojo getNewConfigSimulacao() throws AppException {
         Configuracao valorRodoviaPavimentada = configuracaoBean.encontrarPorChave("valor_pavimentada");
-        Configuracao valorRodoviaNaoPavimentada = configuracaoBean.encontrarPorChave("valor_pavimentada");
+        Configuracao valorRodoviaNaoPavimentada = configuracaoBean.encontrarPorChave("valor_nao_pavimentada");
         Configuracao limitePeso = configuracaoBean.encontrarPorChave("limite_peso");
         Configuracao valorKmExcessoPeso = configuracaoBean.encontrarPorChave("valor_km_excesso_peso");
 

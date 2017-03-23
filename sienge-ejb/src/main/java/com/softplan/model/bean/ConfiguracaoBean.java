@@ -5,6 +5,7 @@ import com.softplan.model.generic.AppException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -28,11 +29,12 @@ public class ConfiguracaoBean extends AbstractBean<Configuracao> {
 
     public Configuracao encontrarPorChave(String chave) throws AppException {
         try {
-            javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Configuracao.class));
-            javax.persistence.Query q = getEntityManager().createQuery(cq);
-            q.setParameter("chave", chave);
-            return (Configuracao) q.getSingleResult();
+            return (Configuracao) em.createQuery(
+                    "SELECT c FROM Configuracao c WHERE c.chave=:chave")
+                    .setParameter("chave", chave)
+                    .setFirstResult(0).getSingleResult();
+        } catch (NonUniqueResultException e) {
+            throw new AppException("Mais de uma chave para mesma configuração com a chave: " + chave);
         } catch (NoResultException e) {
             throw new AppException("Não foi encontrada configuração com a chave: " + chave);
         }
