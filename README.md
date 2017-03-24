@@ -58,3 +58,7 @@ Finished at: Wed Mar 22 23:50:39 BRT 2017
 Final Memory: 18M/393M
 ------------------------------------------------------------------------
 </pre>
+
+
+OBS: Para conexão com o banco de dados deve ser criado um pool dentro do glassfish, bem como uma "jdbc resources" com o nome jdbc/sienge.
+Segue o exemplo de configuração: https://github.com/jmmarca/sienge/blob/master/prints/screencapture-localhost-4848-common-index-jsf-1490374640686.png
